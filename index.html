@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sweet 16 - Mira</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@300;500&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: radial-gradient(ellipse at center, #000 0%, #111 100%);
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: url('https://raw.githubusercontent.com/VincentGarreau/particles.js/master/demo/media/star.png');
+      background-size: contain;
+      animation: moveStars 100s linear infinite;
+      z-index: 0;
+      opacity: 0.2;
+    }
+
+    @keyframes moveStars {
+      0% { background-position: 0 0; }
+      100% { background-position: 10000px 10000px; }
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 4rem;
+      color: #ff66cc;
+      margin-bottom: 20px;
+      z-index: 1;
+      animation: fadeIn 2s ease-in;
+      transition: all 0.3s ease;
+    }
+
+    h1:hover {
+      transform: scale(1.05);
+      text-shadow: 0 0 15px #ff66cc88;
+    }
+
+    #countdown {
+      display: flex;
+      gap: 25px;
+      font-size: 2.5rem;
+      font-weight: 500;
+      margin-top: 10px;
+      z-index: 1;
+    }
+
+    .time-box {
+      background-color: rgba(255, 255, 255, 0.05);
+      padding: 25px 20px;
+      border-radius: 16px;
+      text-align: center;
+      box-shadow: 0 0 15px #ff66cc66;
+      min-width: 90px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .time-box:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 25px #ff99ddaa;
+    }
+
+    .label {
+      font-size: 1rem;
+      color: #aaa;
+      margin-top: 8px;
+    }
+
+    #message {
+      display: none;
+      margin-top: 30px;
+      font-size: 1.8rem;
+      color: #ffccff;
+      animation: fadeIn 2s ease-in-out;
+      transition: transform 0.3s ease, text-shadow 0.3s ease;
+      z-index: 1;
+    }
+
+    #message:hover {
+      transform: scale(1.1);
+      text-shadow: 0 0 15px #ffccff88;
+    }
+
+    footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 0.9rem;
+      color: #777;
+      z-index: 1;
+      transition: transform 0.3s ease;
+    }
+
+    footer:hover {
+      transform: scale(1.05);
+      color: #aaa;
+    }
+
+    .music-btn {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      background: #111;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      z-index: 999;
+    }
+
+    .music-btn:hover {
+      transform: scale(1.1);
+      background: #444;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="stars"></div>
+
+  <h1>🎉 Sweet 16, Mira! 🎉</h1>
+
+  <div id="countdown">
+    <div class="time-box">
+      <div id="days">00</div>
+      <div class="label">Days</div>
+    </div>
+    <div class="time-box">
+      <div id="hours">00</div>
+      <div class="label">Hours</div>
+    </div>
+    <div class="time-box">
+      <div id="minutes">00</div>
+      <div class="label">Minutes</div>
+    </div>
+    <div class="time-box">
+      <div id="seconds">00</div>
+      <div class="label">Seconds</div>
+    </div>
+  </div>
+
+  <div id="message">🎂 Happy Birthday Mira! 🎂</div>
+
+  <footer>Crafted with 💖 by Youssef</footer>
+
+  <button id="playMusicBtn" class="music-btn">🎵 شغّل الموسيقى</button>
+  <audio id="birthdayMusic" loop>
+    <source src="birthday-song.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    // Countdown logic
+    const countdown = () => {
+      const targetDate = new Date("2025-07-29T00:00:00").getTime();
+      const now = new Date().getTime();
+      const gap = targetDate - now;
+
+      const second = 1000;
+      const minute = second * 60;
+      const hour = minute * 60;
+      const day = hour * 24;
+
+      const d = Math.floor(gap / day);
+      const h = Math.floor((gap % day) / hour);
+      const m = Math.floor((gap % hour) / minute);
+      const s = Math.floor((gap % minute) / second);
+
+      document.getElementById("days").innerText = d;
+      document.getElementById("hours").innerText = h;
+      document.getElementById("minutes").innerText = m;
+      document.getElementById("seconds").innerText = s;
+
+      if (gap <= 0) {
+        document.getElementById("countdown").style.display = "none";
+        document.getElementById("message").style.display = "block";
+      }
+    };
+
+    setInterval(countdown, 1000);
+    countdown();
+
+    // Fireworks on load
+    window.onload = () => {
+      confetti({
+        particleCount: 200,
+        spread: 120,
+        origin: { y: 0.6 },
+      });
+    };
+
+    // Music controls
+    const playBtn = document.getElementById('playMusicBtn');
+    const music = document.getElementById('birthdayMusic');
+    let isPlaying = false;
+
+    playBtn.addEventListener('click', () => {
+      if (!isPlaying) {
+        music.play();
+        playBtn.textContent = '⏸️ إيقاف الموسيقى';
+      } else {
+        music.pause();
+        playBtn.textContent = '🎵 شغّل الموسيقى';
+      }
+      isPlaying = !isPlaying;
+    });
+  </script>
+
+</body>
+</html>
